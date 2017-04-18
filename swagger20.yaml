@@ -1,0 +1,218 @@
+---
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Mavryc API"
+  contact: {}
+host: "mavryc.herokuapp.com"
+basePath: "/v1"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /users/{userId}:
+    get:
+      parameters: []
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            $ref: "#/definitions/User"
+    parameters:
+    - name: "userId"
+      in: "path"
+      required: true
+      type: "string"
+  /users:
+    post:
+      summary: "Create a new User"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          type: "object"
+          required:
+          - "email"
+          - "firstname"
+          - "lastname"
+          properties:
+            firstname:
+              type: "string"
+            lastname:
+              type: "string"
+            email:
+              type: "string"
+            phone:
+              type: "string"
+            birthdate:
+              type: "string"
+      responses:
+        200:
+          description: "Status 200"
+  /flights:
+    get:
+      parameters:
+      - name: "origin"
+        in: "query"
+        required: false
+        type: "string"
+        description: "Origin or departure city or airport code"
+        x-example: "Phoenix, AZ"
+      - name: "destination"
+        in: "query"
+        required: false
+        type: "string"
+        description: "Destination city or airport code"
+        x-example: "San Jose, CA"
+      - name: "departureDateTime"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date-time"
+        description: "desired date and time of departure"
+      - name: "arrivalDateTime"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date-time"
+        description: "desired date and time of arrival"
+      - name: "jetServiceType"
+        in: "query"
+        required: false
+        type: "string"
+        description: "Type of Service"
+        enum:
+        - "Small"
+        - "Mid"
+        - "Large"
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Flight"
+  /flight/{flightId}:
+    get:
+      summary: "Loads an individual Flight"
+      parameters: []
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            $ref: "#/definitions/Flight"
+    parameters:
+    - name: "flightId"
+      in: "path"
+      required: true
+      type: "string"
+      x-example: "0e8dd830-ad98-11e6-bf2e-47644ada7c0f"
+definitions:
+  Error:
+    type: "object"
+    required:
+    - "code"
+    properties:
+      code:
+        type: "integer"
+      description:
+        type: "string"
+        example: "Bad query parameter [$size]: Invalid integer value [abc]"
+      reasonPhrase:
+        type: "string"
+        example: "Bad Request"
+    example: "{\n  \"code\": 400,\n  \"description\": \"Bad query parameter [$size]:\
+      \ Invalid integer value [abc]\",\n  \"reasonPhrase\": \"Bad Request\"\n}"
+  User:
+    type: "object"
+    required:
+    - "birthdate"
+    - "email"
+    - "firstname"
+    - "lastname"
+    - "phone"
+    - "userId"
+    properties:
+      userId:
+        type: "string"
+        default: "abcd1234"
+      firstname:
+        type: "string"
+        default: "Flynn"
+      lastname:
+        type: "string"
+        default: "Bridges"
+      email:
+        type: "string"
+        default: "flynn@bridges.com"
+      birthdate:
+        type: "string"
+        default: "06/25/1975"
+      phone:
+        type: "string"
+        description: "555-275-3509"
+    description: "User data object"
+  Flight:
+    type: "object"
+    required:
+    - "flightId"
+    properties:
+      departureCity:
+        type: "string"
+        description: "City of Departure"
+        default: "Phoenix, AZ"
+        example: "San Jose, CA"
+      departureAirportCode:
+        type: "string"
+        description: "Airport Code of Departure"
+        example: "LAX"
+      departureDateTime:
+        type: "string"
+        format: "date-time"
+        description: "date/time of departure"
+      arrivalCity:
+        type: "string"
+        description: "City of arrival"
+        default: "Austin, TX"
+        example: "Cody, WY"
+      arrivalAirportCode:
+        type: "string"
+        example: "SFO"
+      arrivalDateTime:
+        type: "string"
+        format: "date-time"
+        description: "date/time of arrival"
+      flightDuration:
+        type: "string"
+        default: "2 hours 15 minutes"
+      boardingTime:
+        type: "string"
+        format: "date-time"
+      seat:
+        type: "string"
+        description: "seat number(s)"
+        example: "2D"
+      departureTerminal:
+        type: "string"
+        description: "name of terminal at\n departure"
+        example: "2"
+      departureGate:
+        type: "string"
+        description: "name of gate at departure"
+        example: "3"
+      flightId:
+        type: "string"
+        description: "flight identifier"
+      flightNumber:
+        type: "string"
+        description: "flight number"
+    description: "Flight data object representing a leg from an orign to a destination\
+      \ on a given date at a specific time with a time duration and additional details\
+      \ regarding the flight"
