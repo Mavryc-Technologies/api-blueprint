@@ -58,6 +58,7 @@ paths:
           description: "Status 200"
   /flights:
     get:
+      summary: "Get flights best matching input parameters"
       parameters:
       - name: "origin"
         in: "query"
