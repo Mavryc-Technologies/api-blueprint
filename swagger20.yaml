@@ -163,8 +163,15 @@ definitions:
   Flight:
     type: "object"
     required:
+    - "arrivalCity"
+    - "arrivalDateTime"
+    - "departureCity"
+    - "departureDateTime"
     - "flightId"
     properties:
+      flightId:
+        type: "string"
+        description: "flight identifier"
       departureCity:
         type: "string"
         description: "City of Departure"
@@ -178,6 +185,14 @@ definitions:
         type: "string"
         format: "date-time"
         description: "date/time of departure"
+      departureTerminal:
+        type: "string"
+        description: "name of terminal at\n departure"
+        example: "2"
+      departureGate:
+        type: "string"
+        description: "name of gate at departure"
+        example: "3"
       arrivalCity:
         type: "string"
         description: "City of arrival"
@@ -190,9 +205,10 @@ definitions:
         type: "string"
         format: "date-time"
         description: "date/time of arrival"
-      flightDuration:
+      arrivalTerminal:
         type: "string"
-        default: "2 hours 15 minutes"
+      arrivalGate:
+        type: "string"
       boardingTime:
         type: "string"
         format: "date-time"
@@ -200,20 +216,12 @@ definitions:
         type: "string"
         description: "seat number(s)"
         example: "2D"
-      departureTerminal:
-        type: "string"
-        description: "name of terminal at\n departure"
-        example: "2"
-      departureGate:
-        type: "string"
-        description: "name of gate at departure"
-        example: "3"
-      flightId:
-        type: "string"
-        description: "flight identifier"
       flightNumber:
         type: "string"
         description: "flight number"
+      flightDuration:
+        type: "string"
+        default: "2 hours 15 minutes"
     description: "Flight data object representing a leg from an orign to a destination\
       \ on a given date at a specific time with a time duration and additional details\
       \ regarding the flight"
